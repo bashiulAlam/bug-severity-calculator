@@ -11,6 +11,7 @@ public class AssignSeverityLevel {
         for (Severity severity : severities) {
             if (Utility.isInBetween(severityValue, severity.getMinRange(), severity.getMaxRange())) {
                 level = severity.getValue();
+                System.out.println("Severity Assigned : " + level);
                 break;
             }
         }
