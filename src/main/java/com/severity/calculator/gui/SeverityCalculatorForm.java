@@ -2,6 +2,8 @@ package com.severity.calculator.gui;
 
 import com.severity.calculator.assign.AssignSeverityLevel;
 import com.severity.calculator.assign.CalculateSeverityValue;
+import com.severity.calculator.exception.OptionNotSelectedException;
+import com.severity.calculator.exception.SumOutOfAllowedRangeException;
 import com.severity.calculator.model.options.CriteriaQuestionOptions;
 import com.severity.calculator.model.options.ImpactQuestionOptions;
 import com.severity.calculator.model.options.ReleaseQuestionOptions;
@@ -29,7 +31,9 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
     private JComboBox releaseQuestionDropDownOptions;
     private JButton calculate;
     private JButton reset;
-    private JLabel calculatedSeverity;
+    private JTextArea textOutput;
+    private JLabel severityLabel;
+    private JTextArea calculatedSeverity;
 
     public SeverityCalculatorForm() {
         setTitle("Severity Calculator");
@@ -107,23 +111,39 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
         c.add(releaseQuestionDropDownOptions);
 
         calculate = new JButton("Calculate");
-        calculate.setFont(new Font("Arial", Font.PLAIN, 15));
-        calculate.setSize(100, 20);
+        calculate.setFont(new Font("Arial", Font.PLAIN, 18));
+        calculate.setSize(150, 30);
         calculate.setLocation(100, 300);
         calculate.addActionListener(this);
         c.add(calculate);
 
         reset = new JButton("Reset");
-        reset.setFont(new Font("Arial", Font.PLAIN, 15));
-        reset.setSize(100, 20);
-        reset.setLocation(220, 300);
+        reset.setFont(new Font("Arial", Font.PLAIN, 18));
+        reset.setSize(150, 30);
+        reset.setLocation(275, 300);
         reset.addActionListener(this);
         c.add(reset);
 
-        calculatedSeverity = new JLabel("");
+        textOutput = new JTextArea();
+        textOutput.setFont(new Font("Arial", Font.PLAIN, 15));
+        textOutput.setSize(500, 150);
+        textOutput.setLocation(100, 350);
+        textOutput.setLineWrap(true);
+        textOutput.setEditable(false);
+        c.add(textOutput);
+
+        severityLabel = new JLabel("Calculated Severity: ");
+        severityLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        severityLabel.setSize(400, 25);
+        severityLabel.setLocation(100, 520);
+        c.add(severityLabel);
+
+        calculatedSeverity = new JTextArea();
         calculatedSeverity.setFont(new Font("Arial", Font.PLAIN, 20));
-        calculatedSeverity.setSize(500, 25);
-        calculatedSeverity.setLocation(100, 500);
+        calculatedSeverity.setSize(500, 40);
+        calculatedSeverity.setLocation(300, 510);
+        textOutput.setLineWrap(true);
+        textOutput.setEditable(false);
         c.add(calculatedSeverity);
 
         setVisible(true);
@@ -131,16 +151,45 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String severityLevel = "";
         if (e.getSource() == calculate) {
-            amswers.clear();
-            amswers.add((String)impactQuestionDropDownOptions.getSelectedItem());
-            amswers.add((String)criteriaQuestionDropDownOptions.getSelectedItem());
-            amswers.add((String)releaseQuestionDropDownOptions.getSelectedItem());
+            if (impactQuestionDropDownOptions.getSelectedIndex() == -1 || criteriaQuestionDropDownOptions.getSelectedIndex() == -1 || releaseQuestionDropDownOptions.getSelectedIndex() == -1) {
+                try {
+                    throw new OptionNotSelectedException("All the questions must be answered");
+                } catch (OptionNotSelectedException optionNotSelectedException) {
+                    optionNotSelectedException.printStackTrace();
+                    severityLevel = optionNotSelectedException.getMessage();
+                }
+            } else {
+                amswers.clear();
+                amswers.add((String)impactQuestionDropDownOptions.getSelectedItem());
+                amswers.add((String)criteriaQuestionDropDownOptions.getSelectedItem());
+                amswers.add((String)releaseQuestionDropDownOptions.getSelectedItem());
 
-            int severityValue = CalculateSeverityValue.severityValue(amswers);
-            String severityLevel = AssignSeverityLevel.severityLevel(severityValue);
+                int severityValue = 0;
+                try {
+                    String text = "";
+                    for (int i = 0; i < amswers.size(); i++) {
+                        text += "Your answer to question no " + (i + 1) + " : " + amswers.get(i) + "\n";
+                    }
+                    textOutput.setText(text);
+                    textOutput.setEditable(false);
 
+                    severityValue = CalculateSeverityValue.severityValue(amswers);
+                    severityLevel = AssignSeverityLevel.severityLevel(severityValue);
+                } catch (SumOutOfAllowedRangeException sumOutOfAllowedRangeException) {
+                    sumOutOfAllowedRangeException.printStackTrace();
+                    severityLevel = sumOutOfAllowedRangeException.getMessage();
+                }
+
+            }
             calculatedSeverity.setText(severityLevel);
+        } else if (e.getSource() == reset) {
+            impactQuestionDropDownOptions.setSelectedIndex(-1);
+            criteriaQuestionDropDownOptions.setSelectedIndex(-1);
+            releaseQuestionDropDownOptions.setSelectedIndex(-1);
+            textOutput.setText("");
+            calculatedSeverity.setText("");
         }
     }
 }
