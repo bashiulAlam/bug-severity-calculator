@@ -2,7 +2,9 @@ package com.severity.calculator.gui;
 
 import com.severity.calculator.assign.AssignSeverityLevel;
 import com.severity.calculator.assign.CalculateSeverityValue;
+import com.severity.calculator.model.options.CriteriaQuestionOptions;
 import com.severity.calculator.model.options.ImpactQuestionOptions;
+import com.severity.calculator.model.options.ReleaseQuestionOptions;
 import com.severity.calculator.model.questions.Questions;
 import com.severity.calculator.utils.PromptComboBoxRenderer;
 import com.severity.calculator.utils.Utility;
@@ -17,10 +19,14 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
     private ArrayList<String> optionList = new ArrayList<String>();
     public ArrayList<String> amswers = new ArrayList<String>();
 
-    private Container c;
+    public static Container c;
     private JLabel title;
     private JLabel impactQuestionLabel;
     private JComboBox impactQuestionDropDownOptions;
+    private JLabel criteriaQuestionLabel;
+    private JComboBox criteriaQuestionDropDownOptions;
+    private JLabel releaseQuestionLabel;
+    private JComboBox releaseQuestionDropDownOptions;
     private JButton calculate;
     private JButton reset;
     private JLabel calculatedSeverity;
@@ -46,29 +52,71 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
         impactQuestionLabel.setLocation(100, 100);
         c.add(impactQuestionLabel);
 
+        optionList.clear();
         ImpactQuestionOptions[] impactQuestionOptions = ImpactQuestionOptions.values();
         for (ImpactQuestionOptions options : impactQuestionOptions) {
             optionList.add(options.getOption());
         }
+
         impactQuestionDropDownOptions = new JComboBox(Utility.arrayListToStrArrayConverter(optionList));
         impactQuestionDropDownOptions.setRenderer(new PromptComboBoxRenderer("Please Select"));
         impactQuestionDropDownOptions.setFont(new Font("Arial", Font.PLAIN, 14));
-        impactQuestionDropDownOptions.setSize(300, 30);
-        impactQuestionDropDownOptions.setLocation(100, 140);
+        impactQuestionDropDownOptions.setSize(500, 30);
+        impactQuestionDropDownOptions.setLocation(100, 120);
         impactQuestionDropDownOptions.setSelectedIndex(-1);
         c.add(impactQuestionDropDownOptions);
+
+        criteriaQuestionLabel = new JLabel(Questions.QUESTION_2.getQuestion());
+        criteriaQuestionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        criteriaQuestionLabel.setSize(1000, 20);
+        criteriaQuestionLabel.setLocation(100, 160);
+        c.add(criteriaQuestionLabel);
+
+        optionList.clear();
+        CriteriaQuestionOptions[] criteriaQuestionOptions = CriteriaQuestionOptions.values();
+        for (CriteriaQuestionOptions options : criteriaQuestionOptions) {
+            optionList.add(options.getOption());
+        }
+
+        criteriaQuestionDropDownOptions = new JComboBox(Utility.arrayListToStrArrayConverter(optionList));
+        criteriaQuestionDropDownOptions.setRenderer(new PromptComboBoxRenderer("Please Select"));
+        criteriaQuestionDropDownOptions.setFont(new Font("Arial", Font.PLAIN, 14));
+        criteriaQuestionDropDownOptions.setSize(500, 30);
+        criteriaQuestionDropDownOptions.setLocation(100, 180);
+        criteriaQuestionDropDownOptions.setSelectedIndex(-1);
+        c.add(criteriaQuestionDropDownOptions);
+
+        releaseQuestionLabel = new JLabel(Questions.QUESTION_3.getQuestion());
+        releaseQuestionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        releaseQuestionLabel.setSize(1000, 20);
+        releaseQuestionLabel.setLocation(100, 220);
+        c.add(releaseQuestionLabel);
+
+        optionList.clear();
+        ReleaseQuestionOptions[] releaseQuestionOptions = ReleaseQuestionOptions.values();
+        for (ReleaseQuestionOptions options : releaseQuestionOptions) {
+            optionList.add(options.getOption());
+        }
+
+        releaseQuestionDropDownOptions = new JComboBox(Utility.arrayListToStrArrayConverter(optionList));
+        releaseQuestionDropDownOptions.setRenderer(new PromptComboBoxRenderer("Please Select"));
+        releaseQuestionDropDownOptions.setFont(new Font("Arial", Font.PLAIN, 14));
+        releaseQuestionDropDownOptions.setSize(500, 30);
+        releaseQuestionDropDownOptions.setLocation(100, 240);
+        releaseQuestionDropDownOptions.setSelectedIndex(-1);
+        c.add(releaseQuestionDropDownOptions);
 
         calculate = new JButton("Calculate");
         calculate.setFont(new Font("Arial", Font.PLAIN, 15));
         calculate.setSize(100, 20);
-        calculate.setLocation(150, 450);
+        calculate.setLocation(100, 300);
         calculate.addActionListener(this);
         c.add(calculate);
 
         reset = new JButton("Reset");
         reset.setFont(new Font("Arial", Font.PLAIN, 15));
         reset.setSize(100, 20);
-        reset.setLocation(270, 450);
+        reset.setLocation(220, 300);
         reset.addActionListener(this);
         c.add(reset);
 
@@ -84,10 +132,11 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == calculate) {
-
-            String selectedValue = (String)impactQuestionDropDownOptions.getSelectedItem();
             amswers.clear();
-            amswers.add(selectedValue);
+            amswers.add((String)impactQuestionDropDownOptions.getSelectedItem());
+            amswers.add((String)criteriaQuestionDropDownOptions.getSelectedItem());
+            amswers.add((String)releaseQuestionDropDownOptions.getSelectedItem());
+
             int severityValue = CalculateSeverityValue.severityValue(amswers);
             String severityLevel = AssignSeverityLevel.severityLevel(severityValue);
 
