@@ -4,7 +4,7 @@ import com.severity.calculator.assign.AssignSeverityLevel;
 import com.severity.calculator.assign.CalculateSeverityValue;
 import com.severity.calculator.exception.OptionNotSelectedException;
 import com.severity.calculator.exception.SumOutOfAllowedRangeException;
-import com.severity.calculator.model.options.CriteriaQuestionOptions;
+import com.severity.calculator.model.options.CategoryQuestionOptions;
 import com.severity.calculator.model.options.ImpactQuestionOptions;
 import com.severity.calculator.model.options.ReleaseQuestionOptions;
 import com.severity.calculator.model.questions.Questions;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class SeverityCalculatorForm extends JFrame implements ActionListener {
     private ArrayList<String> optionList = new ArrayList<String>();
-    public ArrayList<String> amswers = new ArrayList<String>();
+    public ArrayList<String> answers = new ArrayList<String>();
 
     public static Container c;
     private JLabel title;
@@ -77,8 +77,8 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
         c.add(criteriaQuestionLabel);
 
         optionList.clear();
-        CriteriaQuestionOptions[] criteriaQuestionOptions = CriteriaQuestionOptions.values();
-        for (CriteriaQuestionOptions options : criteriaQuestionOptions) {
+        CategoryQuestionOptions[] categoryQuestionOptions = CategoryQuestionOptions.values();
+        for (CategoryQuestionOptions options : categoryQuestionOptions) {
             optionList.add(options.getOption());
         }
 
@@ -126,7 +126,7 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
 
         textOutput = new JTextArea();
         textOutput.setFont(new Font("Arial", Font.PLAIN, 15));
-        textOutput.setSize(500, 150);
+        textOutput.setSize(600, 150);
         textOutput.setLocation(100, 350);
         textOutput.setLineWrap(true);
         textOutput.setEditable(false);
@@ -161,21 +161,21 @@ public class SeverityCalculatorForm extends JFrame implements ActionListener {
                     severityLevel = optionNotSelectedException.getMessage();
                 }
             } else {
-                amswers.clear();
-                amswers.add((String)impactQuestionDropDownOptions.getSelectedItem());
-                amswers.add((String)criteriaQuestionDropDownOptions.getSelectedItem());
-                amswers.add((String)releaseQuestionDropDownOptions.getSelectedItem());
+                answers.clear();
+                answers.add((String)impactQuestionDropDownOptions.getSelectedItem());
+                answers.add((String)criteriaQuestionDropDownOptions.getSelectedItem());
+                answers.add((String)releaseQuestionDropDownOptions.getSelectedItem());
 
                 int severityValue = 0;
                 try {
                     String text = "";
-                    for (int i = 0; i < amswers.size(); i++) {
-                        text += "Your answer to question no " + (i + 1) + " : " + amswers.get(i) + "\n";
+                    for (int i = 0; i < answers.size(); i++) {
+                        text += "Your answer to question no " + (i + 1) + " : " + answers.get(i) + "\n";
                     }
                     textOutput.setText(text);
                     textOutput.setEditable(false);
 
-                    severityValue = CalculateSeverityValue.severityValue(amswers);
+                    severityValue = CalculateSeverityValue.severityValue(answers);
                     severityLevel = AssignSeverityLevel.severityLevel(severityValue);
                 } catch (SumOutOfAllowedRangeException sumOutOfAllowedRangeException) {
                     sumOutOfAllowedRangeException.printStackTrace();

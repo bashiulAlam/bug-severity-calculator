@@ -1,12 +1,12 @@
 package com.severity.calculator.model;
 
 public enum Severity {
-    BLOCKER("BLOCKER", 91, 100),
-    HIGHEST("HIGHEST", 81, 90),
-    HIGH("HIGH", 61, 80),
-    MEDIUM("MEDIUM", 41, 60),
-    LOW("LOW", 21, 40),
-    LOWEST("LOWEST", 1, 20);
+    BLOCKER("BLOCKER", 25, 50),
+    HIGHEST("HIGHEST", 21, 24),
+    HIGH("HIGH", 17, 20),
+    MEDIUM("MEDIUM", 13, 16),
+    LOW("LOW", 11, 12),
+    LOWEST("LOWEST", 7, 10);
 
     private final String value;
     private final int minRange;

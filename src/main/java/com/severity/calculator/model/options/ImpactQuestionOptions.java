@@ -1,14 +1,13 @@
 package com.severity.calculator.model.options;
 
 public enum ImpactQuestionOptions {
-    FEATURE_BLOCKER("a) It is blocking the feature", 30),
-    OTHER_FEATURE_BLOCKER("b) It is blocking other feature", 30),
-    TEST_BLOCKER("c) It is blocking further testing", 25),
-    WRONG_API_CALL("d) A wrong API call is initiated", 25),
-    WRONG_UI_NAVIGATION("e) UI navigation is wrong", 20),
-    WRONG_ERROR_MESSAGE("f) Error message is wrong", 15),
-    NOT_EFFECTING_OTHER_FEATURE("g) Does not affect any functionality", 7),
-    NOT_SERIOUS("h) Not a significant issue, can be deferred", 2);
+    FEATURE_BLOCKER("a) It is blocking the feature.", 11),
+    TEST_BLOCKER("b) It is blocking further testing.", 10),
+    CLIENT_REPORTED("c) This issue came from client side.", 9),
+    OTHER_FEATURE_BLOCKER("d) It is blocking another feature.", 8),
+    VIOLATES_REQUIREMENT("e) Violates the requirements.", 7),
+    INCOMPLETE_FEATURE("d) Incomplete feature.", 6),
+    NON_BLOCKING("e) This is not a blocker itself or not blocking any other feature",5);
 
     private final String option;
     private final int value;
