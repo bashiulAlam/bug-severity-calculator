@@ -5,8 +5,8 @@ public enum CategoryQuestionOptions {
     WRONG_ERROR_MESSAGE("b) This issue was raised due to Wrong Error Message", 6),
     UI_FUNCTIONAL("c) UI functional items like links, action buttons, drop downs, pop ups etc.", 5),
     UI_NON_FUNCTIONAL("d) UI label, title, placeholder etc. non-functional items", 4),
-    QUICK_FIX("This issue fixing can be done quickly",3),
-    LENGTHY_FIX("This issue fixing may take long time",2);
+    QUICK_FIX("e) This issue fixing can be done quickly",3),
+    LENGTHY_FIX("f) This issue fixing may take long time",2);
 
     private final String option;
     private final int value;

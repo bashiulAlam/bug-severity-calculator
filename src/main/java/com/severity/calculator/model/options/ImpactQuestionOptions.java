@@ -6,8 +6,8 @@ public enum ImpactQuestionOptions {
     CLIENT_REPORTED("c) This issue came from client side.", 9),
     OTHER_FEATURE_BLOCKER("d) It is blocking another feature.", 8),
     VIOLATES_REQUIREMENT("e) Violates the requirements.", 7),
-    INCOMPLETE_FEATURE("d) Incomplete feature.", 6),
-    NON_BLOCKING("e) This is not a blocker itself or not blocking any other feature",5);
+    INCOMPLETE_FEATURE("f) Incomplete feature.", 6),
+    NON_BLOCKING("g) This is not a blocker itself or not blocking any other feature",5);
 
     private final String option;
     private final int value;
